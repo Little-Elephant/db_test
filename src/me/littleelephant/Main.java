@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class Main {
     private static String fileMask = "[\\w]*-[\\d]{4}-[\\d]{2}-[\\d]{2}(-\\d+|).csv";
     private static String dateMask = "[\\d]{4}-[\\d]{2}-[\\d]{2}";
@@ -19,9 +20,8 @@ public class Main {
 	// write your code here
     HashMap params = extractAndCheckArgs(args);
     String[] tasks = prepareTasksList(params.get("path").toString(),params.get("start").toString(),params.get("end").toString());
-    for (String str : tasks) {
-        System.out.println(str);
-        }
+    String[] result = TaskExecutor.executeTasks(params.get("path").toString(), tasks);
+
     }
 
     private static String[] prepareTasksList(String path, String start, String end) throws ParseException
