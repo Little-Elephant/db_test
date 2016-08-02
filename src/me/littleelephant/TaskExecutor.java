@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by PavelV on 31.07.2016.
@@ -15,6 +16,7 @@ public class TaskExecutor {
         List<String> result = new ArrayList<String>();
         for (int i =0; i<list.length; ++i){
             result.addAll(calculateFromFiles(path, list[i]));
+            
         }
     return result.toArray(new String[0]);
     }
@@ -32,11 +34,6 @@ public class TaskExecutor {
 
     private static ArrayList<String> calculateFromFiles(String path, String task)
     {
-        Float min = Float.MAX_VALUE;
-        Float max = (float) 0;
-        Float last = (float) 0;
-        Date lastDate = new Date(0);
-        Integer qty = 0;
         String str;
         ArrayList<String> result= new ArrayList<String>();
 
@@ -70,7 +67,7 @@ public class TaskExecutor {
             }
 
         }
-        result.add(task.split("-",2)[0]+","+task.split("-",2)[1]+","+last+","+max+","+min+","+qty);
+        result.add(task.split("-",2)[0]+","+task.split("-",2)[1]+",");
         return result;
     }
 
