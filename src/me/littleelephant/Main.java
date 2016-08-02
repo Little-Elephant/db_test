@@ -1,7 +1,6 @@
 package me.littleelephant;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,14 +20,42 @@ public class Main {
     HashMap params = extractAndCheckArgs(args);
     String[] tasks = prepareTasksList(params.get("path").toString(),params.get("start").toString(),params.get("end").toString());
     String[] result = TaskExecutor.executeTasks(params.get("path").toString(), tasks);
+    sortAndStore(result, params.get("output").toString());
+    }
 
+    private static void sortAndStore (String[] result, String outFileName)
+    {
+        Arrays.sort(result);
+        File fout = new File(outFileName);
+        FileWriter fwr = null;
+        BufferedWriter bwr = null;
+        try {
+            fwr = new FileWriter(fout);
+            bwr = new BufferedWriter(fwr);
+
+            for (int i = 0; i<result.length; ++i)
+            {
+                bwr.write(result[i]);
+                bwr.newLine();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                bwr.close();
+                fwr.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     private static String[] prepareTasksList(String path, String start, String end) throws ParseException
     {
         String[] taskList = taskListFromFiles(path);
-        String[] result = filterByDate(taskList, start,end);
-        return  result;
+        return filterByDate(taskList, start,end);
     }
 
     private static String[] taskListFromFiles(String path) throws ParseException {
@@ -38,8 +65,7 @@ public class Main {
                 return name.matches(fileMask);
             }
         });
-        String[] result = filesToUniqTasks(fileList);
-        return result;
+        return filesToUniqTasks(fileList);
     }
 
     private static String[] filesToUniqTasks(String[] list)
